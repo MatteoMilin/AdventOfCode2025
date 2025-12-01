@@ -24,22 +24,48 @@ char **get_combination_from_file(char *filepath)
     return split_string(buff, "\n");
 }
 
+int number_of_zero_left(int dial, int subtrahend, int *dial_zero_count)
+{
+    for (int i = 0; i < subtrahend; i++) {
+        dial -= 1;
+        if (dial == -1) {
+            dial = 99;
+        }
+        if (dial == 0) {
+            *dial_zero_count += 1;
+        }
+    }
+    return dial;
+}
+
+int number_of_zero_right(int dial, int addend, int *dial_zero_count)
+{
+    for (int i = 0; i < addend; i++) {
+        dial += 1;
+        if (dial == 100) {
+            dial = 0;
+        }
+        if (dial == 0) {
+            *dial_zero_count += 1;
+        }
+    }
+    return dial;
+}
 int get_code(char **combinations)
 {
     int dial_zero_count = 0;
     int dial = 50;
     char direction = 'N';
+    int tmp = 0;
 
     for (int i = 0; combinations[i] != NULL; ++i) {
         direction = combinations[i][0];
-        if (direction == 'L')
-            dial = (dial - atoi(&combinations[i][1])) % 100;
-        else if (direction == 'R')
-            dial = (dial + atoi(&combinations[i][1])) % 100;
-        else
+        if (direction == 'L') {
+            dial = number_of_zero_left(dial, atoi(&combinations[i][1]), &dial_zero_count);
+        } else if (direction == 'R') {
+            dial = number_of_zero_right(dial, atoi(&combinations[i][1]), &dial_zero_count);
+        } else
             return -1;
-        if (dial == 0)
-            dial_zero_count += 1;
     }
     return dial_zero_count;
 }
