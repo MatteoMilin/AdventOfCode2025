@@ -4,7 +4,6 @@ batteries = batteries[:-1]
 sum_jolt = 0
 
 for battery in batteries:
-    print(battery)
     first_max_index = -67
     second_max_index = -67
     for i in range(0, len(battery) - 1):
